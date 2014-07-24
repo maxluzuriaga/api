@@ -30,8 +30,6 @@ class V1::SparksController < ApplicationController
       
       render "show"
     elsif @spark.duplicate?
-      # TODO: Handle the different spark_types provided by multiple users
-      
       @spark = Spark.find_by(content_hash: @spark.content_hash)
       
       unless(@spark.users.include?(@user))
@@ -58,7 +56,7 @@ class V1::SparksController < ApplicationController
   private
   
     def spark_params
-      params.require(:spark).permit(:content, :content_hash, :content_type, :spark_type, :file)
+      params.require(:spark).permit(:content, :content_hash, :content_type, :file)
     end
   
 end
