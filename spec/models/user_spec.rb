@@ -11,7 +11,7 @@
 
 require 'spec_helper'
 
-describe User do
+describe User, :type => :model do
   
   before do
     @attr = {
@@ -29,14 +29,14 @@ describe User do
     it "requires a name" do
       user = User.new(@attr)
       user.name = ""
-      user.should_not be_valid
+      expect(user).not_to be_valid
     end
     
     it "accepts valid emails" do
       emails = %w[user@foo.com THE_USER@foo.bar.org first.last@foo.jp]
       emails.each do |a|
         user = User.new(@attr.merge(:email => a))
-        user.should be_valid
+        expect(user).to be_valid
       end
     end
     
@@ -44,7 +44,7 @@ describe User do
       emails = %w[user@foo,com user_at_foo.org example.user@foo.]
       emails.each do |a|
         user = User.new(@attr.merge(:email => a))
-        user.should_not be_valid
+        expect(user).not_to be_valid
       end
     end
     
@@ -63,17 +63,17 @@ describe User do
     end
     
     it "has a sparks attribute" do
-      @user.should respond_to(:sparks)
+      expect(@user).to respond_to(:sparks)
     end
     
     it "has the right sparks" do
-      @user.sparks.should == [@s1, @s2]
+      expect(@user.sparks).to eq([@s1, @s2])
     end
     
     it "doesn't destroy associated sparks" do
       @user.destroy
       [@s1, @s2].each do |s|
-        Spark.find_by(id: s.id).should_not be_nil
+        expect(Spark.find_by(id: s.id)).not_to be_nil
       end
     end
     
@@ -95,17 +95,17 @@ describe User do
     end
     
     it "has an ideas attribute" do
-      @user.should respond_to(:ideas)
+      expect(@user).to respond_to(:ideas)
     end
     
     it "has the right ideas" do
-      @user.ideas.should == [@i1, @i2]
+      expect(@user.ideas).to eq([@i1, @i2])
     end
     
     it "doesn't destroy associated ideas" do
       @user.destroy
       [@i1, @i2].each do |i|
-        Idea.find_by(id: i.id).should_not be_nil
+        expect(Idea.find_by(id: i.id)).not_to be_nil
       end
     end
     
@@ -133,17 +133,17 @@ describe User do
     end
     
     it "has an comments attribute" do
-      @user.should respond_to(:comments)
+      expect(@user).to respond_to(:comments)
     end
     
     it "has the right comments" do
-      @user.comments.should == [@c1, @c2]
+      expect(@user.comments).to eq([@c1, @c2])
     end
     
     it "doesn't destroy associated comments" do
       @user.destroy
       [@c1, @c2].each do |c|
-        Comment.find_by(id: c.id).should_not be_nil
+        expect(Comment.find_by(id: c.id)).not_to be_nil
       end
     end
     
@@ -165,17 +165,17 @@ describe User do
     end
     
     it "has an authentications attribute" do
-      @user.should respond_to(:authentications)
+      expect(@user).to respond_to(:authentications)
     end
     
     it "has the right authentications" do
-      @user.authentications.should == [@a1, @a2]
+      expect(@user.authentications).to eq([@a1, @a2])
     end
     
     it "does destroy associated authentications" do
       @user.destroy
       [@a1, @a2].each do |a|
-        Authentication.find_by(id: a.id).should be_nil
+        expect(Authentication.find_by(id: a.id)).to be_nil
       end
     end
     
@@ -197,17 +197,17 @@ describe User do
     end
     
     it "has a devices attribute" do
-      @user.should respond_to(:devices)
+      expect(@user).to respond_to(:devices)
     end
     
     it "has the right devices" do
-      @user.devices.should == [@d1, @d2]
+      expect(@user.devices).to eq([@d1, @d2])
     end
     
     it "does destroy associated devices" do
       @user.destroy
       [@d1, @d2].each do |d|
-        Device.find_by(id: d.id).should be_nil
+        expect(Device.find_by(id: d.id)).to be_nil
       end
     end
     

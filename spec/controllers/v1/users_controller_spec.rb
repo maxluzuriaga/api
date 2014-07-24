@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe V1::UsersController do
+describe V1::UsersController, :type => :controller do
   
   describe "GET 'index'" do
     
@@ -14,18 +14,18 @@ describe V1::UsersController do
     
     it "is successful" do
       get :index, :format => 'json', :token => @auth_token
-      response.should be_success
+      expect(response).to be_success
     end
     
     it "returns the correct users" do
       get :index, :format => 'json', :token => @auth_token
       output = JSON.parse(response.body)
       
-      output.should be_a_kind_of(Array)
-      output.length.should == User.all.length
+      expect(output).to be_a_kind_of(Array)
+      expect(output.length).to eq(User.all.length)
       
       output.each_with_index do |user, index|
-        user["name"].should == @users[index].name
+        expect(user["name"]).to eq(@users[index].name)
       end
     end
     
@@ -39,15 +39,15 @@ describe V1::UsersController do
     
     it "is successful" do
       get :show, :id => @user, :format => 'json', :token => @auth_token
-      response.should be_success
+      expect(response).to be_success
     end
     
     it "returns the correct user" do
       get :show, :id => @user, :format => 'json', :token => @auth_token
       output = JSON.parse(response.body)
       
-      output.should be_a_kind_of(Hash)
-      output["name"].should == @user.name
+      expect(output).to be_a_kind_of(Hash)
+      expect(output["name"]).to eq(@user.name)
     end
     
   end
@@ -63,14 +63,14 @@ describe V1::UsersController do
     
     it "is successful" do
       patch :update, :id => @test_user, :user => @attr, :format => 'json', :token => @auth_token
-      response.should be_success
+      expect(response).to be_success
     end
     
     it "updates the user" do
       patch :update, :id => @test_user, :user => @attr, :format => 'json', :token => @auth_token
       @test_user.reload
-      @test_user.name.should == @attr[:name]
-      @test_user.email.should == @attr[:email]
+      expect(@test_user.name).to eq(@attr[:name])
+      expect(@test_user.email).to eq(@attr[:email])
     end
     
     it "returns the user" do
@@ -80,8 +80,8 @@ describe V1::UsersController do
       
       output = JSON.parse(response.body)
       
-      output.should be_a_kind_of(Hash)
-      output["name"].should == @test_user.name
+      expect(output).to be_a_kind_of(Hash)
+      expect(output["name"]).to eq(@test_user.name)
     end
     
   end
@@ -90,7 +90,7 @@ describe V1::UsersController do
     
     it "is successful" do
       delete :destroy, :id => @test_user, :format => 'json', :token => @auth_token
-      response.should be_success
+      expect(response).to be_success
     end
     
     it "destroys the user" do

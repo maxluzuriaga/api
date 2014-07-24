@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe "routes for Sparks" do
+describe "routes for Sparks", :type => :routing do
   
   it "routes get /api/v1/sparks.json to Sparks controller" do
-    { :get => "/api/v1/sparks.json" }.should route_to(
+    expect({ :get => "/api/v1/sparks.json" }).to route_to(
       :controller => "v1/sparks",
       :action => "index",
       :format => "json"
@@ -11,7 +11,7 @@ describe "routes for Sparks" do
   end
   
   it "routes post /api/v1/sparks.json to Sparks controller" do
-    { :post => "/api/v1/sparks.json" }.should route_to(
+    expect({ :post => "/api/v1/sparks.json" }).to route_to(
       :controller => "v1/sparks",
       :action => "create",
       :format => "json"
@@ -19,7 +19,7 @@ describe "routes for Sparks" do
   end
   
   it "routes get /api/v1/sparks/:id.json to Sparks controller" do
-    { :get => "/api/v1/sparks/1.json" }.should route_to(
+    expect({ :get => "/api/v1/sparks/1.json" }).to route_to(
       :controller => "v1/sparks",
       :action => "show",
       :id => "1",
@@ -28,7 +28,7 @@ describe "routes for Sparks" do
   end
   
   it "routes delete /api/v1/sparks/:id.json to Sparks controller" do
-    { :delete => "/api/v1/sparks/1.json" }.should route_to(
+    expect({ :delete => "/api/v1/sparks/1.json" }).to route_to(
       :controller => "v1/sparks",
       :action => "destroy",
       :id => "1",

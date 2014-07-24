@@ -1,4 +1,4 @@
 require 'spec_helper'
 
-describe AuthenticationsController do
+describe AuthenticationsController, :type => :controller do
 end

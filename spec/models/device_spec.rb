@@ -12,7 +12,7 @@
 
 require 'spec_helper'
 
-describe Device do
+describe Device, :type => :model do
   before do
     @user = FactoryGirl.create(:user)
     @attr = {
@@ -29,11 +29,11 @@ describe Device do
     
     it "generates a new token on create" do
       device = Device.create!(@attr)
-      device.token.should_not be_nil
+      expect(device.token).not_to be_nil
     end
     
     it "generates unique tokens" do
-      Device.create!(@attr).token.should_not == Device.create!(@attr).token
+      expect(Device.create!(@attr).token).not_to eq(Device.create!(@attr).token)
     end
     
   end
@@ -49,16 +49,16 @@ describe Device do
     end
     
     it "has a user attribute" do
-      @device.should respond_to(:user)
+      expect(@device).to respond_to(:user)
     end
     
     it "has the right user" do
-      @device.user.should == @user
+      expect(@device.user).to eq(@user)
     end
     
     it "doesn't destroy associated users" do
       @device.destroy
-      User.find_by(id: @user.id).should_not be_nil
+      expect(User.find_by(id: @user.id)).not_to be_nil
     end
     
   end

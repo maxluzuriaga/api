@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "Authenticating" do
+describe "Authenticating", :type => :feature do
   
   it "should create a new authentication" do
     expect {
@@ -19,7 +19,7 @@ describe "Authenticating" do
       visit "/auth/developer"
     }.to change { Device.count }.by(1)
     
-    Device.last.registration_id.should_not be_nil
+    expect(Device.last.registration_id).not_to be_nil
   end
   
   describe "with an existing user and authentication" do
@@ -46,7 +46,7 @@ describe "Authenticating" do
         visit "/auth/developer"
       }.to change { Device.count }.by(1)
       
-      @test_user.devices.last.registration_id.should_not be_nil
+      expect(@test_user.devices.last.registration_id).not_to be_nil
     end
     
     describe "and device" do

@@ -10,7 +10,6 @@ FactoryGirl.define do
   end
   
   factory :spark do
-    spark_type "I"
     content_type "P"
     file Rack::Test::UploadedFile.new('spec/fixtures/images/test.jpg', 'image/jpeg')
     sequence :content do |n|

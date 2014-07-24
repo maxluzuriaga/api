@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe "routes for Tags" do
+describe "routes for Tags", :type => :routing do
   
   it "routes get /api/v1/tags.json to Tags controller" do
-    { :get => "/api/v1/tags.json" }.should route_to(
+    expect({ :get => "/api/v1/tags.json" }).to route_to(
       :controller => "v1/tags",
       :action => "index",
       :format => "json"
@@ -11,7 +11,7 @@ describe "routes for Tags" do
   end
   
   it "routes get /api/v1/tags/:id.json to Tags controller" do
-    { :get => "/api/v1/tags/foobar.json" }.should route_to(
+    expect({ :get => "/api/v1/tags/foobar.json" }).to route_to(
       :controller => "v1/tags",
       :action => "show",
       :id => "foobar",

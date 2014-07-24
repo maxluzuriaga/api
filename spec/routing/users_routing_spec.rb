@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe "routes for Users" do
+describe "routes for Users", :type => :routing do
   
   it "routes get /api/v1/users.json to Users controller" do
-    { :get => "/api/v1/users.json" }.should route_to(
+    expect({ :get => "/api/v1/users.json" }).to route_to(
       :controller => "v1/users",
       :action => "index",
       :format => "json"
@@ -11,7 +11,7 @@ describe "routes for Users" do
   end
   
   it "routes get /api/v1/users/:id.json to Users controller" do
-    { :get => "/api/v1/users/max.json" }.should route_to(
+    expect({ :get => "/api/v1/users/max.json" }).to route_to(
       :controller => "v1/users",
       :action => "show",
       :id => "max",
@@ -20,7 +20,7 @@ describe "routes for Users" do
   end
   
   it "routes patch /api/v1/users/:id.json to Users controller" do
-    { :patch => "/api/v1/users/max.json" }.should route_to(
+    expect({ :patch => "/api/v1/users/max.json" }).to route_to(
       :controller => "v1/users",
       :action => "update",
       :id => "max",
@@ -29,7 +29,7 @@ describe "routes for Users" do
   end
   
   it "routes delete /api/v1/users/:id.json to Users controller" do
-    { :delete => "/api/v1/users/max.json" }.should route_to(
+    expect({ :delete => "/api/v1/users/max.json" }).to route_to(
       :controller => "v1/users",
       :action => "destroy",
       :id => "max",

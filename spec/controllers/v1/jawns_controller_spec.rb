@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe V1::JawnsController do
+describe V1::JawnsController, :type => :controller do
   
   before do
     @jawns = []
@@ -28,18 +28,18 @@ describe V1::JawnsController do
     
     it "is successful" do
       get :index, :format => 'json', :token => @auth_token
-      response.should be_success
+      expect(response).to be_success
     end
     
     it "returns the correct jawns" do
       get :index, :format => 'json', :token => @auth_token
       output = JSON.parse(response.body)
       
-      output.should be_a_kind_of(Array)
-      output.length.should == @jawns.length
+      expect(output).to be_a_kind_of(Array)
+      expect(output.length).to eq(@jawns.length)
       
       output.each_with_index do |jawn, index|
-        jawn["jawn_type"].should == @jawns[index].class.to_s.downcase
+        expect(jawn["jawn_type"]).to eq(@jawns[index].class.to_s.downcase)
       end
     end
     
@@ -47,11 +47,11 @@ describe V1::JawnsController do
       get :index, :format => 'json', :limit => 10, :token => @auth_token
       output = JSON.parse(response.body)
       
-      output.should be_a_kind_of(Array)
-      output.length.should == 10
+      expect(output).to be_a_kind_of(Array)
+      expect(output.length).to eq(10)
       
       output.each_with_index do |jawn, index|
-        jawn["jawn_type"].should == @jawns[index].class.to_s.downcase
+        expect(jawn["jawn_type"]).to eq(@jawns[index].class.to_s.downcase)
       end
     end
     
@@ -61,13 +61,13 @@ describe V1::JawnsController do
         get :index, :format => 'json', :offset => 5, :token => @auth_token
         output = JSON.parse(response.body)
         
-        output.should be_a_kind_of(Array)
-        output.length.should == @jawns.length - 5
+        expect(output).to be_a_kind_of(Array)
+        expect(output.length).to eq(@jawns.length - 5)
         
         jawns = @jawns[5..-1]
         
         output.each_with_index do |jawn, index|
-          jawn["jawn_type"].should == jawns[index].class.to_s.downcase
+          expect(jawn["jawn_type"]).to eq(jawns[index].class.to_s.downcase)
         end
       end
       
@@ -75,13 +75,13 @@ describe V1::JawnsController do
         get :index, :format => 'json', :offset => 5, :limit => 10, :token => @auth_token
         output = JSON.parse(response.body)
         
-        output.should be_a_kind_of(Array)
-        output.length.should == 10
+        expect(output).to be_a_kind_of(Array)
+        expect(output.length).to eq(10)
         
         jawns = @jawns[5..-1]
         
         output.each_with_index do |jawn, index|
-          jawn["jawn_type"].should == jawns[index].class.to_s.downcase
+          expect(jawn["jawn_type"]).to eq(jawns[index].class.to_s.downcase)
         end
       end
       
@@ -93,15 +93,15 @@ describe V1::JawnsController do
         get :index, :format => 'json', :lite => "true", :token => @auth_token
         output = JSON.parse(response.body)
         
-        output.should be_a_kind_of(Array)
+        expect(output).to be_a_kind_of(Array)
         
         output.each do |jawn|
-          jawn["id"].should_not be_nil
-          jawn["jawn_type"].should_not be_nil
-          jawn["users"].should be_nil
-          jawn["user"].should be_nil
-          jawn["sparks"].should be_nil
-          jawn["ideas"].should be_nil
+          expect(jawn["id"]).not_to be_nil
+          expect(jawn["jawn_type"]).not_to be_nil
+          expect(jawn["users"]).to be_nil
+          expect(jawn["user"]).to be_nil
+          expect(jawn["sparks"]).to be_nil
+          expect(jawn["ideas"]).to be_nil
         end
       end
       
@@ -115,13 +115,13 @@ describe V1::JawnsController do
         get :index, :format => 'json', :seed => "#{seed}", :token => @auth_token
         output = JSON.parse(response.body)
 
-        output.should be_a_kind_of(Array)
-        output.length.should == @jawns.length
+        expect(output).to be_a_kind_of(Array)
+        expect(output.length).to eq(@jawns.length)
         
         jawns = (Spark.all + Idea.all).shuffle(random: Random.new((seed+1)*10000))
         
         output.each_with_index do |jawn, index|
-          jawn["jawn_type"].should == jawns[index].class.to_s.downcase
+          expect(jawn["jawn_type"]).to eq(jawns[index].class.to_s.downcase)
         end
       end
       
@@ -134,10 +134,10 @@ describe V1::JawnsController do
         get :index, :format => 'json', :seed => "#{seed}", :token => @auth_token
         output2 = JSON.parse(response.body)
 
-        output.length.should == output2.length
+        expect(output.length).to eq(output2.length)
         
         output.each_with_index do |jawn, index|
-          jawn["id"].should == output2[index]["id"]
+          expect(jawn["id"]).to eq(output2[index]["id"])
         end
       end
       
@@ -152,10 +152,10 @@ describe V1::JawnsController do
           get :index, :format => 'json', :seed => "#{seed}", :token => @auth_token, :offset => 5
           output2 = JSON.parse(response.body)
 
-          output2.length.should == output.length - 5
+          expect(output2.length).to eq(output.length - 5)
 
           output2.each_with_index do |jawn, index|
-            jawn["id"].should == output[index + 5]["id"]
+            expect(jawn["id"]).to eq(output[index + 5]["id"])
           end
         end
         
@@ -169,12 +169,12 @@ describe V1::JawnsController do
         get :index, :format => 'json', :filter => "ideas", :token => @auth_token
         output = JSON.parse(response.body)
 
-        output.should be_a_kind_of(Array)
-        output.length.should == @ideas.length
+        expect(output).to be_a_kind_of(Array)
+        expect(output.length).to eq(@ideas.length)
 
         output.each_with_index do |jawn, index|
-          jawn["jawn_type"].should == "idea"
-          jawn["description"].should == @ideas[index].description
+          expect(jawn["jawn_type"]).to eq("idea")
+          expect(jawn["description"]).to eq(@ideas[index].description)
         end
       end
       
@@ -182,12 +182,12 @@ describe V1::JawnsController do
         get :index, :format => 'json', :filter => "ideas", :limit => 3, :token => @auth_token
         output = JSON.parse(response.body)
 
-        output.should be_a_kind_of(Array)
-        output.length.should == 3
+        expect(output).to be_a_kind_of(Array)
+        expect(output.length).to eq(3)
 
         output.each_with_index do |jawn, index|
-          jawn["jawn_type"].should == "idea"
-          jawn["description"].should == @ideas[index].description
+          expect(jawn["jawn_type"]).to eq("idea")
+          expect(jawn["description"]).to eq(@ideas[index].description)
         end
       end
       
@@ -197,14 +197,14 @@ describe V1::JawnsController do
           get :index, :format => 'json', :filter => "ideas", :offset => 3, :token => @auth_token
           output = JSON.parse(response.body)
 
-          output.should be_a_kind_of(Array)
-          output.length.should == @ideas.length - 3
+          expect(output).to be_a_kind_of(Array)
+          expect(output.length).to eq(@ideas.length - 3)
 
           jawns = @ideas[3..-1]
 
           output.each_with_index do |jawn, index|
-            jawn["jawn_type"].should == "idea"
-            jawn["description"].should == jawns[index].description
+            expect(jawn["jawn_type"]).to eq("idea")
+            expect(jawn["description"]).to eq(jawns[index].description)
           end
         end
 
@@ -212,14 +212,14 @@ describe V1::JawnsController do
           get :index, :format => 'json', :filter => "ideas", :offset => 3, :limit => 3, :token => @auth_token
           output = JSON.parse(response.body)
 
-          output.should be_a_kind_of(Array)
-          output.length.should == 3
+          expect(output).to be_a_kind_of(Array)
+          expect(output.length).to eq(3)
 
           jawns = @ideas[3..-1]
 
           output.each_with_index do |jawn, index|
-            jawn["jawn_type"].should == "idea"
-            jawn["description"].should == jawns[index].description
+            expect(jawn["jawn_type"]).to eq("idea")
+            expect(jawn["description"]).to eq(jawns[index].description)
           end
         end
 
@@ -233,8 +233,8 @@ describe V1::JawnsController do
           get :index, :format => 'json', :filter => "ideas", :seed => "#{seed}", :token => @auth_token
           output = JSON.parse(response.body)
 
-          output.should be_a_kind_of(Array)
-          output.length.should == @ideas.length
+          expect(output).to be_a_kind_of(Array)
+          expect(output.length).to eq(@ideas.length)
           
           idea_ids = @ideas.map(&:id)
           ids = []
@@ -247,7 +247,7 @@ describe V1::JawnsController do
             idea_ids.delete id
           end
           
-          idea_ids.should be_empty
+          expect(idea_ids).to be_empty
         end
         
         it "returns the same ideas with the same seed" do
@@ -259,10 +259,10 @@ describe V1::JawnsController do
           get :index, :format => 'json', :filter => "ideas", :seed => "#{seed}", :token => @auth_token
           output2 = JSON.parse(response.body)
         
-          output.length.should == output2.length
+          expect(output.length).to eq(output2.length)
         
           output.each_with_index do |jawn, index|
-            jawn["id"].should == output2[index]["id"]
+            expect(jawn["id"]).to eq(output2[index]["id"])
           end
         end
         
@@ -277,10 +277,10 @@ describe V1::JawnsController do
             get :index, :format => 'json', :filter => "ideas", :seed => "#{seed}", :token => @auth_token, :offset => 5
             output2 = JSON.parse(response.body)
         
-            output2.length.should == output.length - 5
+            expect(output2.length).to eq(output.length - 5)
         
             output2.each_with_index do |jawn, index|
-              jawn["id"].should == output[index + 5]["id"]
+              expect(jawn["id"]).to eq(output[index + 5]["id"])
             end
           end
         
@@ -296,12 +296,12 @@ describe V1::JawnsController do
         get :index, :format => 'json', :filter => "sparks", :token => @auth_token
         output = JSON.parse(response.body)
 
-        output.should be_a_kind_of(Array)
-        output.length.should == @sparks.length
+        expect(output).to be_a_kind_of(Array)
+        expect(output.length).to eq(@sparks.length)
 
         output.each_with_index do |jawn, index|
-          jawn["jawn_type"].should == "spark"
-          jawn["content_hash"].should == @sparks[index].content_hash
+          expect(jawn["jawn_type"]).to eq("spark")
+          expect(jawn["content_hash"]).to eq(@sparks[index].content_hash)
         end
       end
       
@@ -309,12 +309,12 @@ describe V1::JawnsController do
         get :index, :format => 'json', :filter => "sparks", :limit => 3, :token => @auth_token
         output = JSON.parse(response.body)
 
-        output.should be_a_kind_of(Array)
-        output.length.should == 3
+        expect(output).to be_a_kind_of(Array)
+        expect(output.length).to eq(3)
 
         output.each_with_index do |jawn, index|
-          jawn["jawn_type"].should == "spark"
-          jawn["content_hash"].should == @sparks[index].content_hash
+          expect(jawn["jawn_type"]).to eq("spark")
+          expect(jawn["content_hash"]).to eq(@sparks[index].content_hash)
         end
       end
       
@@ -324,14 +324,14 @@ describe V1::JawnsController do
           get :index, :format => 'json', :filter => "sparks", :offset => 3, :token => @auth_token
           output = JSON.parse(response.body)
 
-          output.should be_a_kind_of(Array)
-          output.length.should == @sparks.length - 3
+          expect(output).to be_a_kind_of(Array)
+          expect(output.length).to eq(@sparks.length - 3)
 
           jawns = @sparks[3..-1]
 
           output.each_with_index do |jawn, index|
-            jawn["jawn_type"].should == "spark"
-            jawn["content_hash"].should == jawns[index].content_hash
+            expect(jawn["jawn_type"]).to eq("spark")
+            expect(jawn["content_hash"]).to eq(jawns[index].content_hash)
           end
         end
 
@@ -339,14 +339,14 @@ describe V1::JawnsController do
           get :index, :format => 'json', :filter => "sparks", :offset => 3, :limit => 3, :token => @auth_token
           output = JSON.parse(response.body)
 
-          output.should be_a_kind_of(Array)
-          output.length.should == 3
+          expect(output).to be_a_kind_of(Array)
+          expect(output.length).to eq(3)
 
           jawns = @sparks[3..-1]
 
           output.each_with_index do |jawn, index|
-            jawn["jawn_type"].should == "spark"
-            jawn["content_hash"].should == jawns[index].content_hash
+            expect(jawn["jawn_type"]).to eq("spark")
+            expect(jawn["content_hash"]).to eq(jawns[index].content_hash)
           end
         end
         
@@ -360,8 +360,8 @@ describe V1::JawnsController do
           get :index, :format => 'json', :filter => "sparks", :seed => "#{seed}", :token => @auth_token
           output = JSON.parse(response.body)
 
-          output.should be_a_kind_of(Array)
-          output.length.should == @sparks.length
+          expect(output).to be_a_kind_of(Array)
+          expect(output.length).to eq(@sparks.length)
           
           spark_ids = @sparks.map(&:id)
           ids = []
@@ -374,7 +374,7 @@ describe V1::JawnsController do
             spark_ids.delete id
           end
           
-          spark_ids.should be_empty
+          expect(spark_ids).to be_empty
         end
         
         it "returns the same sparks with the same seed" do
@@ -386,10 +386,10 @@ describe V1::JawnsController do
           get :index, :format => 'json', :filter => "sparks", :seed => "#{seed}", :token => @auth_token
           output2 = JSON.parse(response.body)
         
-          output.length.should == output2.length
+          expect(output.length).to eq(output2.length)
         
           output.each_with_index do |jawn, index|
-            jawn["id"].should == output2[index]["id"]
+            expect(jawn["id"]).to eq(output2[index]["id"])
           end
         end
         
@@ -404,10 +404,10 @@ describe V1::JawnsController do
             get :index, :format => 'json', :filter => "sparks", :seed => "#{seed}", :token => @auth_token, :offset => 5
             output2 = JSON.parse(response.body)
         
-            output2.length.should == output.length - 5
+            expect(output2.length).to eq(output.length - 5)
         
             output2.each_with_index do |jawn, index|
-              jawn["id"].should == output[index + 5]["id"]
+              expect(jawn["id"]).to eq(output[index + 5]["id"])
             end
           end
         
@@ -425,24 +425,24 @@ describe V1::JawnsController do
       get :count, :format => 'json', :token => @auth_token
       output = JSON.parse(response.body)
 
-      output.should be_a_kind_of(Hash)
-      output["sparks_count"].should == @sparks.count
+      expect(output).to be_a_kind_of(Hash)
+      expect(output["sparks_count"]).to eq(@sparks.count)
     end
     
     it "should have the correct ideas count" do
       get :count, :format => 'json', :token => @auth_token
       output = JSON.parse(response.body)
 
-      output.should be_a_kind_of(Hash)
-      output["ideas_count"].should == @ideas.count
+      expect(output).to be_a_kind_of(Hash)
+      expect(output["ideas_count"]).to eq(@ideas.count)
     end
     
     it "should have the correct jawns count" do
       get :count, :format => 'json', :token => @auth_token
       output = JSON.parse(response.body)
 
-      output.should be_a_kind_of(Hash)
-      output["jawns_count"].should == @jawns.count
+      expect(output).to be_a_kind_of(Hash)
+      expect(output["jawns_count"]).to eq(@jawns.count)
     end
     
   end

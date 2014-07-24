@@ -12,7 +12,7 @@
 
 require 'spec_helper'
 
-describe Authentication do
+describe Authentication, :type => :model do
   
   before do
     @attr = {
@@ -30,13 +30,13 @@ describe Authentication do
     it "requires a provider" do
       auth = Authentication.new(@attr)
       auth.provider = ""
-      auth.should_not be_valid
+      expect(auth).not_to be_valid
     end
     
     it "requires a uid" do
       auth = Authentication.new(@attr)
       auth.uid = ""
-      auth.should_not be_valid
+      expect(auth).not_to be_valid
     end
     
   end
@@ -52,16 +52,16 @@ describe Authentication do
     end
     
     it "has a user attribute" do
-      @auth.should respond_to(:user)
+      expect(@auth).to respond_to(:user)
     end
     
     it "has the right user" do
-      @auth.user.should == @user
+      expect(@auth.user).to eq(@user)
     end
     
     it "doesn't destroy associated users" do
       @auth.destroy
-      User.find_by(id: @user.id).should_not be_nil
+      expect(User.find_by(id: @user.id)).not_to be_nil
     end
     
   end

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe V1::SparksController do
+describe V1::SparksController, :type => :controller do
   
   describe "GET 'index'" do
     
@@ -16,18 +16,18 @@ describe V1::SparksController do
     
     it "is successful" do
       get :index, :format => 'json', :token => @auth_token
-      response.should be_success
+      expect(response).to be_success
     end
     
     it "returns the correct sparks" do
       get :index, :format => 'json', :token => @auth_token
       output = JSON.parse(response.body)
       
-      output.should be_a_kind_of(Array)
-      output.length.should == @sparks.length
+      expect(output).to be_a_kind_of(Array)
+      expect(output.length).to eq(@sparks.length)
       
       output.each_with_index do |spark, index|
-        spark["content_hash"].should == @sparks[index].content_hash
+        expect(spark["content_hash"]).to eq(@sparks[index].content_hash)
       end
     end
     
@@ -35,11 +35,11 @@ describe V1::SparksController do
       get :index, :format => 'json', :limit => 10, :token => @auth_token
       output = JSON.parse(response.body)
       
-      output.should be_a_kind_of(Array)
-      output.length.should == 10
+      expect(output).to be_a_kind_of(Array)
+      expect(output.length).to eq(10)
       
       output.each_with_index do |spark, index|
-        spark["content_hash"].should == @sparks[index].content_hash
+        expect(spark["content_hash"]).to eq(@sparks[index].content_hash)
       end
     end
     
@@ -49,12 +49,12 @@ describe V1::SparksController do
         get :index, :format => 'json', :lite => "true", :token => @auth_token
         output = JSON.parse(response.body)
         
-        output.should be_a_kind_of(Array)
+        expect(output).to be_a_kind_of(Array)
         
         output.each do |spark|
-          spark["id"].should_not be_nil
-          spark["users"].should be_nil
-          spark["ideas"].should be_nil
+          expect(spark["id"]).not_to be_nil
+          expect(spark["users"]).to be_nil
+          expect(spark["ideas"]).to be_nil
         end
       end
       
@@ -70,16 +70,16 @@ describe V1::SparksController do
     
     it "is successful" do
       get :show, :id => @spark, :format => 'json', :token => @auth_token
-      response.should be_success
+      expect(response).to be_success
     end
     
     it "returns the correct spark" do
       get :show, :id => @spark, :format => 'json', :token => @auth_token
       output = JSON.parse(response.body)
       
-      output.should be_a_kind_of(Hash)
-      output["content_hash"].should == @spark.content_hash
-      output["file"].should_not be_nil
+      expect(output).to be_a_kind_of(Hash)
+      expect(output["content_hash"]).to eq(@spark.content_hash)
+      expect(output["file"]).not_to be_nil
     end
     
     describe "lite response" do
@@ -88,11 +88,11 @@ describe V1::SparksController do
         get :show, :id => @spark, :format => 'json', :lite => "true", :token => @auth_token
         output = JSON.parse(response.body)
         
-        output.should be_a_kind_of(Hash)
+        expect(output).to be_a_kind_of(Hash)
         
-        output["id"].should_not be_nil
-        output["users"].should be_nil
-        output["ideas"].should be_nil
+        expect(output["id"]).not_to be_nil
+        expect(output["users"]).to be_nil
+        expect(output["ideas"]).to be_nil
       end
       
     end
@@ -103,7 +103,6 @@ describe V1::SparksController do
     
     before do
       @attr = {
-        :spark_type   => "I",
         :content_type => "P",
         :content      => "Picture title",
         :file         => fixture_file_upload('spec/fixtures/images/test.jpg', 'image/jpeg')
@@ -114,7 +113,7 @@ describe V1::SparksController do
       
       it "is successful" do
         post :create, :spark => @attr, :format => 'json', :token => @auth_token
-        response.should be_success
+        expect(response).to be_success
       end
     
       it "should create the spark" do
@@ -122,12 +121,12 @@ describe V1::SparksController do
           post :create, :spark => @attr, :format => 'json', :token => @auth_token
         }.to change { Spark.count }.by(1)
         
-        Spark.last.content.should == @attr[:content]
+        expect(Spark.last.content).to eq(@attr[:content])
       end
       
       it "should add the user to the spark" do
         post :create, :spark => @attr, :format => 'json', :token => @auth_token
-        Spark.last.users.should == [@test_user]
+        expect(Spark.last.users).to eq([@test_user])
       end
       
       it "should add tags to the spark" do
@@ -139,7 +138,7 @@ describe V1::SparksController do
         
         post :create, :spark => @attr, :format => 'json', :tags => tags, :token => @auth_token
         
-        Spark.last.tags.should == [t1,t2,t3]
+        expect(Spark.last.tags).to eq([t1,t2,t3])
       end
       
       it "should create new tags" do
@@ -152,7 +151,7 @@ describe V1::SparksController do
         post :create, :spark => @attr, :format => 'json', :tags => tags, :token => @auth_token
         
         [t1,t2,t3].each do |t|
-          Tag.find_by(tag_text: t).should_not be_nil
+          expect(Tag.find_by(tag_text: t)).not_to be_nil
         end
       end
       
@@ -160,10 +159,10 @@ describe V1::SparksController do
         post :create, :spark => @attr, :format => 'json', :token => @auth_token
         output = JSON.parse(response.body)
 
-        output.should be_a_kind_of(Hash)
-        output["content_hash"].should == Spark.last.content_hash
-        output["tags"].should == Spark.last.tags.map(&:tag_text)
-        output["spark_is_new"].should == true
+        expect(output).to be_a_kind_of(Hash)
+        expect(output["content_hash"]).to eq(Spark.last.content_hash)
+        expect(output["tags"]).to eq(Spark.last.tags.map(&:tag_text))
+        expect(output["spark_is_new"]).to eq(true)
       end
       
     end
@@ -176,7 +175,7 @@ describe V1::SparksController do
       
       it "isn't successful" do
         post :create, :spark => @attr, :format => 'json', :token => @auth_token
-        response.should_not be_success
+        expect(response).not_to be_success
       end
     
       it "shouldn't create the spark" do
@@ -199,7 +198,7 @@ describe V1::SparksController do
       
       it "is successful" do
         post :create, :spark => @attr, :format => 'json', :token => @auth_token
-        response.should be_success
+        expect(response).to be_success
       end
     
       it "shouldn't create the spark" do
@@ -210,16 +209,16 @@ describe V1::SparksController do
       
       it "should add the user to the spark" do
         post :create, :spark => @attr, :format => 'json', :token => @auth_token
-        @spark.users.should == [@test_user, @user2]
+        expect(@spark.users).to eq([@test_user, @user2])
       end
       
       it "should return the spark" do
         post :create, :spark => @attr, :format => 'json', :token => @auth_token
         output = JSON.parse(response.body)
 
-        output.should be_a_kind_of(Hash)
-        output["content_hash"].should == @spark.content_hash
-        output["spark_is_new"].should_not == true
+        expect(output).to be_a_kind_of(Hash)
+        expect(output["content_hash"]).to eq(@spark.content_hash)
+        expect(output["spark_is_new"]).not_to eq(true)
       end
       
     end
@@ -236,7 +235,7 @@ describe V1::SparksController do
     
     it "is successful" do
       delete :destroy, :id => @spark, :format => 'json', :token => @auth_token
-      response.should be_success
+      expect(response).to be_success
     end
     
     it "doesn't destroy the spark" do
@@ -247,7 +246,7 @@ describe V1::SparksController do
     
     it "removes the user from the spark" do
       delete :destroy, :id => @spark, :format => 'json', :token => @auth_token
-      @spark.users.include?(@test_user).should be_falsey
+      expect(@spark.users.include?(@test_user)).to be_falsey
     end
     
     it "returns the spark" do
@@ -255,8 +254,8 @@ describe V1::SparksController do
       @spark.reload
       output = JSON.parse(response.body)
 
-      output.should be_a_kind_of(Hash)
-      output["content_hash"].should == @spark.content_hash
+      expect(output).to be_a_kind_of(Hash)
+      expect(output["content_hash"]).to eq(@spark.content_hash)
     end
     
   end

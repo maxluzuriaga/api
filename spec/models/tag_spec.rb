@@ -10,7 +10,7 @@
 
 require 'spec_helper'
 
-describe Tag do
+describe Tag, :type => :model do
   
   before do
     @attr = {
@@ -27,7 +27,7 @@ describe Tag do
     it "requires tag text" do
       tag = Tag.new(@attr)
       tag.tag_text = ""
-      tag.should_not be_valid
+      expect(tag).not_to be_valid
     end
     
     it "requires unique tag text" do
@@ -37,14 +37,14 @@ describe Tag do
       tag2 = Tag.new(@attr)
       tag2.tag_text = "yellow"
       
-      tag2.should_not be_valid
+      expect(tag2).not_to be_valid
     end
     
     it "accepts valid tag text" do
       tags = %w[purple red_heart nintendo64 some-tag]
       tags.each do |a|
         tag = Tag.new(@attr.merge(:tag_text => a))
-        tag.should be_valid
+        expect(tag).to be_valid
       end
     end
     
@@ -53,7 +53,7 @@ describe Tag do
       tags.push "this is cool"
       tags.each do |a|
         tag = Tag.new(@attr.merge(:tag_text => a))
-        tag.should_not be_valid
+        expect(tag).not_to be_valid
       end
     end
     
@@ -72,17 +72,17 @@ describe Tag do
     end
     
     it "has a sparks attribute" do
-      @tag.should respond_to(:sparks)
+      expect(@tag).to respond_to(:sparks)
     end
     
     it "has the right sparks" do
-      @tag.sparks.should == [@s1, @s2]
+      expect(@tag.sparks).to eq([@s1, @s2])
     end
     
     it "doesn't destroy associated sparks" do
       @tag.destroy
       [@s1, @s2].each do |s|
-        Spark.find_by(id: s.id).should_not be_nil
+        expect(Spark.find_by(id: s.id)).not_to be_nil
       end
     end
     
@@ -101,17 +101,17 @@ describe Tag do
     end
     
     it "has an ideas attribute" do
-      @tag.should respond_to(:ideas)
+      expect(@tag).to respond_to(:ideas)
     end
     
     it "has the right ideas" do
-      @tag.ideas.should == [@i1, @i2]
+      expect(@tag.ideas).to eq([@i1, @i2])
     end
     
     it "doesn't destroy associated ideas" do
       @tag.destroy
       [@i1, @i2].each do |i|
-        Idea.find_by(id: i.id).should_not be_nil
+        expect(Idea.find_by(id: i.id)).not_to be_nil
       end
     end
     
@@ -139,11 +139,11 @@ describe Tag do
     end
     
     it "has a jawns method" do
-      @tag.should respond_to(:jawns)
+      expect(@tag).to respond_to(:jawns)
     end
     
     it "returns the correct jawns" do
-      @tag.jawns.should == @jawns
+      expect(@tag.jawns).to eq(@jawns)
     end
     
   end

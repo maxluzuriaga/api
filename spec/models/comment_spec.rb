@@ -13,7 +13,7 @@
 
 require 'spec_helper'
 
-describe Comment do
+describe Comment, :type => :model do
   
   before do
     @attr = {
@@ -30,7 +30,7 @@ describe Comment do
     it "requires comment text" do
       comment = Comment.new(@attr)
       comment.comment_text = ""
-      comment.should_not be_valid
+      expect(comment).not_to be_valid
     end
     
   end
@@ -46,16 +46,16 @@ describe Comment do
     end
     
     it "has a user attribute" do
-      @comment.should respond_to(:user)
+      expect(@comment).to respond_to(:user)
     end
     
     it "has the right user" do
-      @comment.user.should == @user
+      expect(@comment.user).to eq(@user)
     end
     
     it "doesn't destroy associated users" do
       @comment.destroy
-      User.find_by(id: @user.id).should_not be_nil
+      expect(User.find_by(id: @user.id)).not_to be_nil
     end
     
   end
@@ -70,7 +70,7 @@ describe Comment do
     end
     
     it "has a commentable attribute" do
-      @comment.should respond_to(:commentable)
+      expect(@comment).to respond_to(:commentable)
     end
     
     it "can be a spark" do
@@ -91,7 +91,7 @@ describe Comment do
       @comment.commentable = @spark
       @comment.save
       
-      Comment.find(@comment.id).commentable.should == @spark
+      expect(Comment.find(@comment.id).commentable).to eq(@spark)
     end
     
     it "doesn't destroy associated commentable jawn" do
@@ -99,7 +99,7 @@ describe Comment do
       @comment.save
       
       @comment.destroy
-      Spark.find_by(id: @spark.id).should_not be_nil
+      expect(Spark.find_by(id: @spark.id)).not_to be_nil
     end
     
   end

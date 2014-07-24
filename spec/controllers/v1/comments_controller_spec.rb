@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe V1::CommentsController do
+describe V1::CommentsController, :type => :controller do
   
   before do
     @spark = FactoryGirl.create(:spark)
@@ -33,18 +33,18 @@ describe V1::CommentsController do
       
       it "is successful" do
         get :index, :spark_id => @spark, :format => 'json', :token => @auth_token
-        response.should be_success
+        expect(response).to be_success
       end
 
       it "returns the correct comments" do
         get :index, :spark_id => @spark, :format => 'json', :token => @auth_token
         output = JSON.parse(response.body)
 
-        output.should be_a_kind_of(Array)
-        output.length.should == @spark.comments.length
+        expect(output).to be_a_kind_of(Array)
+        expect(output.length).to eq(@spark.comments.length)
 
         output.each_with_index do |comment, index|
-          comment["comment_text"].should == @spark.comments[index].comment_text
+          expect(comment["comment_text"]).to eq(@spark.comments[index].comment_text)
         end
       end
       
@@ -54,18 +54,18 @@ describe V1::CommentsController do
       
       it "is successful" do
         get :index, :idea_id => @idea, :format => 'json', :token => @auth_token
-        response.should be_success
+        expect(response).to be_success
       end
 
       it "returns the correct comments" do
         get :index, :idea_id => @idea, :format => 'json', :token => @auth_token
         output = JSON.parse(response.body)
 
-        output.should be_a_kind_of(Array)
-        output.length.should == @idea.comments.length
+        expect(output).to be_a_kind_of(Array)
+        expect(output.length).to eq(@idea.comments.length)
 
         output.each_with_index do |comment, index|
-          comment["comment_text"].should == @idea.comments[index].comment_text
+          expect(comment["comment_text"]).to eq(@idea.comments[index].comment_text)
         end
       end
       
@@ -93,15 +93,15 @@ describe V1::CommentsController do
       
       it "is successful" do
         get :show, :spark_id => @spark, :id => @spark_comment, :format => 'json', :token => @auth_token
-        response.should be_success
+        expect(response).to be_success
       end
 
       it "returns the correct comment" do
         get :show, :spark_id => @spark, :id => @spark_comment, :format => 'json', :token => @auth_token
         output = JSON.parse(response.body)
 
-        output.should be_a_kind_of(Hash)
-        output["comment_text"].should == @spark_comment.comment_text
+        expect(output).to be_a_kind_of(Hash)
+        expect(output["comment_text"]).to eq(@spark_comment.comment_text)
       end
       
     end
@@ -110,15 +110,15 @@ describe V1::CommentsController do
       
       it "is successful" do
         get :show, :idea_id => @idea, :id => @idea_comment, :format => 'json', :token => @auth_token
-        response.should be_success
+        expect(response).to be_success
       end
 
       it "returns the correct comment" do
         get :show, :idea_id => @idea, :id => @idea_comment, :format => 'json', :token => @auth_token
         output = JSON.parse(response.body)
 
-        output.should be_a_kind_of(Hash)
-        output["comment_text"].should == @idea_comment.comment_text
+        expect(output).to be_a_kind_of(Hash)
+        expect(output["comment_text"]).to eq(@idea_comment.comment_text)
       end
       
     end
@@ -137,7 +137,7 @@ describe V1::CommentsController do
       
       it "is successful" do
         post :create, :spark_id => @spark, :comment => @attr, :format => 'json', :token => @auth_token
-        response.should be_success
+        expect(response).to be_success
       end
     
       it "should create the comment" do
@@ -150,20 +150,20 @@ describe V1::CommentsController do
         post :create, :spark_id => @spark, :comment => @attr, :format => 'json', :token => @auth_token
         output = JSON.parse(response.body)
 
-        output.should be_a_kind_of(Hash)
-        output["comment_text"].should == @attr[:comment_text]
+        expect(output).to be_a_kind_of(Hash)
+        expect(output["comment_text"]).to eq(@attr[:comment_text])
       end
       
       it "should associate the user and the comment" do
         post :create, :spark_id => @spark, :comment => @attr, :format => 'json', :token => @auth_token
         comment = Comment.last
-        comment.user.should == @test_user
+        expect(comment.user).to eq(@test_user)
       end
       
       it "should associate the spark and the comment" do
         post :create, :spark_id => @spark, :comment => @attr, :format => 'json', :token => @auth_token
         comment = Comment.find_by(comment_text: @attr[:comment_text])
-        comment.commentable.should == @spark
+        expect(comment.commentable).to eq(@spark)
       end
       
     end
@@ -172,7 +172,7 @@ describe V1::CommentsController do
       
       it "is successful" do
         post :create, :idea_id => @idea, :comment => @attr, :format => 'json', :token => @auth_token
-        response.should be_success
+        expect(response).to be_success
       end
     
       it "should create the comment" do
@@ -185,20 +185,20 @@ describe V1::CommentsController do
         post :create, :idea_id => @idea, :comment => @attr, :format => 'json', :token => @auth_token
         output = JSON.parse(response.body)
 
-        output.should be_a_kind_of(Hash)
-        output["comment_text"].should == @attr[:comment_text]
+        expect(output).to be_a_kind_of(Hash)
+        expect(output["comment_text"]).to eq(@attr[:comment_text])
       end
       
       it "should associate the user and the comment" do
         post :create, :idea_id => @idea, :comment => @attr, :format => 'json', :token => @auth_token
         comment = Comment.last
-        comment.user.should == @test_user
+        expect(comment.user).to eq(@test_user)
       end
       
       it "should associate the idea and the comment" do
         post :create, :idea_id => @idea, :comment => @attr, :format => 'json', :token => @auth_token
         comment = Comment.last
-        comment.commentable.should == @idea
+        expect(comment.commentable).to eq(@idea)
       end
       
     end
@@ -227,7 +227,7 @@ describe V1::CommentsController do
         
         it "is successful" do
           delete :destroy, :spark_id => @spark, :id => @comment, :format => 'json', :token => @auth_token
-          response.should be_success
+          expect(response).to be_success
         end
 
         it "destroys the comment" do
@@ -242,7 +242,7 @@ describe V1::CommentsController do
         
         it "isn't successful" do
           delete :destroy, :spark_id => @spark, :id => @comment, :format => 'json', :token => @wrong_token
-          response.should_not be_success
+          expect(response).not_to be_success
         end
 
         it "doesn't destroy the comment" do
@@ -266,7 +266,7 @@ describe V1::CommentsController do
         
         it "is successful" do
           delete :destroy, :idea_id => @idea, :id => @comment, :format => 'json', :token => @auth_token
-          response.should be_success
+          expect(response).to be_success
         end
 
         it "destroys the comment" do
@@ -281,7 +281,7 @@ describe V1::CommentsController do
         
         it "isn't successful" do
           delete :destroy, :idea_id => @idea, :id => @comment, :format => 'json', :token => @wrong_token
-          response.should_not be_success
+          expect(response).not_to be_success
         end
 
         it "doesn't destroy the comment" do

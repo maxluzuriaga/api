@@ -17,7 +17,7 @@
 
 require 'spec_helper'
 
-describe Spark do
+describe Spark, :type => :model do
   
   before do
     @attr = {
@@ -37,14 +37,14 @@ describe Spark do
     it "requires a spark type" do
       spark = Spark.new(@attr)
       spark.spark_type = ""
-      spark.should_not be_valid
+      expect(spark).not_to be_valid
     end
     
     it "accepts valid spark types" do
       types = %w[W I P]
       types.each do |t|
         spark = Spark.new(@attr.merge(:spark_type => t))
-        spark.should be_valid
+        expect(spark).to be_valid
       end
     end
     
@@ -52,21 +52,21 @@ describe Spark do
       types = %w[w i p some_type L l V v C c T t A a V v whatever]
       types.each do |t|
         spark = Spark.new(@attr.merge(:spark_type => t))
-        spark.should_not be_valid
+        expect(spark).not_to be_valid
       end
     end
     
     it "requires a content type" do
       spark = Spark.new(@attr)
       spark.content_type = ""
-      spark.should_not be_valid
+      expect(spark).not_to be_valid
     end
     
     it "accepts valid content types" do
       types = %w[L V C T P A]
       types.each do |t|
         spark = Spark.new(@attr.merge(:content_type => t))
-        spark.should be_valid
+        expect(spark).to be_valid
       end
     end
     
@@ -74,14 +74,14 @@ describe Spark do
       types = %w[l v c t p a v W w I i some_type whatever]
       types.each do |t|
         spark = Spark.new(@attr.merge(:content_type => t))
-        spark.should_not be_valid
+        expect(spark).not_to be_valid
       end
     end
     
     it "requires content" do
       spark = Spark.new(@attr)
       spark.content = ""
-      spark.should_not be_valid
+      expect(spark).not_to be_valid
     end
     
   end
@@ -92,7 +92,7 @@ describe Spark do
       spark = Spark.new(@attr)
       spark.save
       
-      spark.content_hash.should_not be_blank
+      expect(spark.content_hash).not_to be_blank
     end
     
     it "requires a unique hash" do
@@ -101,7 +101,7 @@ describe Spark do
       
       spark2 = Spark.new(@attr)
       spark2.spark_type = "P"
-      spark2.should_not be_valid
+      expect(spark2).not_to be_valid
     end
     
   end
@@ -109,7 +109,7 @@ describe Spark do
   describe "file" do
     
     it "has a file attribute" do
-      Spark.new.should respond_to(:file)
+      expect(Spark.new).to respond_to(:file)
     end
     
     describe "without an attached file" do
@@ -120,7 +120,7 @@ describe Spark do
       end
       
       it "has a missing url" do
-        @spark.file.url.should == "/files/original/missing.png"
+        expect(@spark.file.url).to eq("/files/original/missing.png")
       end
       
     end
@@ -132,7 +132,7 @@ describe Spark do
       end
       
       it "has a valid url" do
-        @spark.file.url.should_not == "/files/original/missing.png"
+        expect(@spark.file.url).not_to eq("/files/original/missing.png")
       end
       
     end
@@ -152,17 +152,17 @@ describe Spark do
     end
     
     it "has a ideas attribute" do
-      @spark.should respond_to(:ideas)
+      expect(@spark).to respond_to(:ideas)
     end
     
     it "has the right ideas" do
-      @spark.ideas.should == [@i1, @i2]
+      expect(@spark.ideas).to eq([@i1, @i2])
     end
     
     it "doesn't destroy associated ideas" do
       @spark.destroy
       [@i1, @i2].each do |i|
-        Idea.find_by(id: i.id).should_not be_nil
+        expect(Idea.find_by(id: i.id)).not_to be_nil
       end
     end
     
@@ -181,17 +181,17 @@ describe Spark do
     end
     
     it "has a users attribute" do
-      @spark.should respond_to(:users)
+      expect(@spark).to respond_to(:users)
     end
     
     it "has the right users" do
-      @spark.users.should == [@u1, @u2]
+      expect(@spark.users).to eq([@u1, @u2])
     end
     
     it "doesn't destroy associated users" do
       @spark.destroy
       [@u1, @u2].each do |u|
-        User.find_by(id: u.id).should_not be_nil
+        expect(User.find_by(id: u.id)).not_to be_nil
       end
     end
     
@@ -218,17 +218,17 @@ describe Spark do
     end
     
     it "has an comments attribute" do
-      @spark.should respond_to(:comments)
+      expect(@spark).to respond_to(:comments)
     end
     
     it "has the right comments" do
-      @spark.comments.should == [@c1, @c2]
+      expect(@spark.comments).to eq([@c1, @c2])
     end
     
     it "does destroy associated comments" do
       @spark.destroy
       [@c1, @c2].each do |c|
-        Comment.find_by(id: c.id).should be_nil
+        expect(Comment.find_by(id: c.id)).to be_nil
       end
     end
     
@@ -247,17 +247,17 @@ describe Spark do
     end
     
     it "has a tags attribute" do
-      @spark.should respond_to(:tags)
+      expect(@spark).to respond_to(:tags)
     end
     
     it "has the right tags" do
-      @spark.tags.should == [@t1, @t2]
+      expect(@spark.tags).to eq([@t1, @t2])
     end
     
     it "doesn't destroy associated tags" do
       @spark.destroy
       [@t1, @t2].each do |t|
-        Tag.find_by(id: t.id).should_not be_nil
+        expect(Tag.find_by(id: t.id)).not_to be_nil
       end
     end
     
@@ -272,13 +272,13 @@ describe Spark do
     end
     
     it "should randomize the sparks" do
-      Spark.random(0.4).map(&:id).should_not == Spark.all.map(&:id)
+      expect(Spark.random(0.4).map(&:id)).not_to eq(Spark.all.map(&:id))
     end
     
     it "should return the same order for the same seed" do
-      Spark.random(0.4).map(&:id).should == Spark.random(0.4).map(&:id)
-      Spark.random(0.3).map(&:id).should == Spark.random(0.3).map(&:id)
-      Spark.random(0.3).map(&:id).should_not == Spark.random(0.4).map(&:id)
+      expect(Spark.random(0.4).map(&:id)).to eq(Spark.random(0.4).map(&:id))
+      expect(Spark.random(0.3).map(&:id)).to eq(Spark.random(0.3).map(&:id))
+      expect(Spark.random(0.3).map(&:id)).not_to eq(Spark.random(0.4).map(&:id))
     end
     
   end

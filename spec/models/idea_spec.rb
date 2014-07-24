@@ -11,7 +11,7 @@
 
 require 'spec_helper'
 
-describe Idea do
+describe Idea, :type => :model do
   
   before do
     @attr = {
@@ -36,17 +36,17 @@ describe Idea do
     end
     
     it "has a sparks attribute" do
-      @idea.should respond_to(:sparks)
+      expect(@idea).to respond_to(:sparks)
     end
     
     it "has the right sparks" do
-      @idea.sparks.should == [@s1, @s2]
+      expect(@idea.sparks).to eq([@s1, @s2])
     end
     
     it "doesn't destroy associated sparks" do
       @idea.destroy
       [@s1, @s2].each do |s|
-        Spark.find_by(id: s.id).should_not be_nil
+        expect(Spark.find_by(id: s.id)).not_to be_nil
       end
     end
     
@@ -63,16 +63,16 @@ describe Idea do
     end
     
     it "has a user attribute" do
-      @idea.should respond_to(:user)
+      expect(@idea).to respond_to(:user)
     end
     
     it "has the right user" do
-      @idea.user.should == @user
+      expect(@idea.user).to eq(@user)
     end
     
     it "doesn't destroy associated users" do
       @idea.destroy
-      User.find_by(id: @user.id).should_not be_nil
+      expect(User.find_by(id: @user.id)).not_to be_nil
     end
     
   end
@@ -98,17 +98,17 @@ describe Idea do
     end
     
     it "has an comments attribute" do
-      @idea.should respond_to(:comments)
+      expect(@idea).to respond_to(:comments)
     end
     
     it "has the right comments" do
-      @idea.comments.should == [@c1, @c2]
+      expect(@idea.comments).to eq([@c1, @c2])
     end
     
     it "does destroy associated comments" do
       @idea.destroy
       [@c1, @c2].each do |c|
-        Comment.find_by(id: c.id).should be_nil
+        expect(Comment.find_by(id: c.id)).to be_nil
       end
     end
     
@@ -127,17 +127,17 @@ describe Idea do
     end
     
     it "has a tags attribute" do
-      @idea.should respond_to(:tags)
+      expect(@idea).to respond_to(:tags)
     end
     
     it "has the right tags" do
-      @idea.tags.should == [@t1, @t2]
+      expect(@idea.tags).to eq([@t1, @t2])
     end
     
     it "doesn't destroy associated tags" do
       @idea.destroy
       [@t1, @t2].each do |t|
-        Tag.find_by(id: t.id).should_not be_nil
+        expect(Tag.find_by(id: t.id)).not_to be_nil
       end
     end
     
@@ -152,13 +152,13 @@ describe Idea do
     end
     
     it "should randomize the ideas" do
-      Idea.random(0.4).map(&:id).should_not == Idea.all.map(&:id)
+      expect(Idea.random(0.4).map(&:id)).not_to eq(Idea.all.map(&:id))
     end
     
     it "should return the same order for the same seed" do
-      Idea.random(0.4).map(&:id).should == Idea.random(0.4).map(&:id)
-      Idea.random(0.3).map(&:id).should == Idea.random(0.3).map(&:id)
-      Idea.random(0.3).map(&:id).should_not == Idea.random(0.4).map(&:id)
+      expect(Idea.random(0.4).map(&:id)).to eq(Idea.random(0.4).map(&:id))
+      expect(Idea.random(0.3).map(&:id)).to eq(Idea.random(0.3).map(&:id))
+      expect(Idea.random(0.3).map(&:id)).not_to eq(Idea.random(0.4).map(&:id))
     end
     
   end

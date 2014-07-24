@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe V1::IdeasController do
+describe V1::IdeasController, :type => :controller do
   
   describe "GET 'index'" do
     
@@ -16,18 +16,18 @@ describe V1::IdeasController do
     
     it "is successful" do
       get :index, :format => 'json', :token => @auth_token
-      response.should be_success
+      expect(response).to be_success
     end
     
     it "returns the correct ideas" do
       get :index, :format => 'json', :token => @auth_token
       output = JSON.parse(response.body)
       
-      output.should be_a_kind_of(Array)
-      output.length.should == @ideas.length
+      expect(output).to be_a_kind_of(Array)
+      expect(output.length).to eq(@ideas.length)
       
       output.each_with_index do |idea, index|
-        idea["description"].should == @ideas[index].description
+        expect(idea["description"]).to eq(@ideas[index].description)
       end
     end
     
@@ -35,11 +35,11 @@ describe V1::IdeasController do
       get :index, :format => 'json', :limit => 10, :token => @auth_token
       output = JSON.parse(response.body)
       
-      output.should be_a_kind_of(Array)
-      output.length.should == 10
+      expect(output).to be_a_kind_of(Array)
+      expect(output.length).to eq(10)
       
       output.each_with_index do |idea, index|
-        idea["description"].should == @ideas[index].description
+        expect(idea["description"]).to eq(@ideas[index].description)
       end
     end
     
@@ -49,12 +49,12 @@ describe V1::IdeasController do
         get :index, :format => 'json', :lite => "true", :token => @auth_token
         output = JSON.parse(response.body)
         
-        output.should be_a_kind_of(Array)
+        expect(output).to be_a_kind_of(Array)
         
         output.each do |idea|
-          idea["id"].should_not be_nil
-          idea["user"].should be_nil
-          idea["sparks"].should be_nil
+          expect(idea["id"]).not_to be_nil
+          expect(idea["user"]).to be_nil
+          expect(idea["sparks"]).to be_nil
         end
       end
       
@@ -70,15 +70,15 @@ describe V1::IdeasController do
     
     it "is successful" do
       get :show, :id => @idea, :format => 'json', :token => @auth_token
-      response.should be_success
+      expect(response).to be_success
     end
     
     it "returns the correct idea" do
       get :show, :id => @idea, :format => 'json', :token => @auth_token
       output = JSON.parse(response.body)
       
-      output.should be_a_kind_of(Hash)
-      output["description"].should == @idea.description
+      expect(output).to be_a_kind_of(Hash)
+      expect(output["description"]).to eq(@idea.description)
     end
     
     describe "lite response" do
@@ -87,11 +87,11 @@ describe V1::IdeasController do
         get :show, :id => @idea, :format => 'json', :lite => "true", :token => @auth_token
         output = JSON.parse(response.body)
         
-        output.should be_a_kind_of(Hash)
+        expect(output).to be_a_kind_of(Hash)
         
-        output["id"].should_not be_nil
-        output["user"].should be_nil
-        output["sparks"].should be_nil
+        expect(output["id"]).not_to be_nil
+        expect(output["user"]).to be_nil
+        expect(output["sparks"]).to be_nil
       end
       
     end
@@ -115,7 +115,7 @@ describe V1::IdeasController do
       
       it "is successful" do
         post :create, :idea => @attr, :format => 'json', :sparks => @sparks, :token => @auth_token
-        response.should be_success
+        expect(response).to be_success
       end
     
       it "should create the idea" do
@@ -127,19 +127,19 @@ describe V1::IdeasController do
       it "should add the user to the idea" do
         post :create, :idea => @attr, :format => 'json', :sparks => @sparks, :token => @auth_token
         @idea = Idea.last
-        @idea.user.should == @test_user
+        expect(@idea.user).to eq(@test_user)
       end
       
       it "should add the sparks to the idea" do
         post :create, :idea => @attr, :format => 'json', :sparks => @sparks, :token => @auth_token
         @idea = Idea.last
-        @idea.sparks.should == [@s1, @s2]
+        expect(@idea.sparks).to eq([@s1, @s2])
       end
       
       it "should ignore invalid sparks" do
         post :create, :idea => @attr, :format => 'json', :sparks => @sparks + ",100", :token => @auth_token
         @idea = Idea.last
-        @idea.sparks.should == [@s1, @s2]
+        expect(@idea.sparks).to eq([@s1, @s2])
       end
       
       it "should add tags to the spark" do
@@ -152,7 +152,7 @@ describe V1::IdeasController do
         post :create, :idea => @attr, :format => 'json', :sparks => @sparks, :tags => tags, :token => @auth_token
         
         @idea = Idea.last
-        @idea.tags.should == [t1,t2,t3]
+        expect(@idea.tags).to eq([t1,t2,t3])
       end
       
       it "should create new tags" do
@@ -165,7 +165,7 @@ describe V1::IdeasController do
         post :create, :idea => @attr, :format => 'json', :sparks => @sparks, :tags => tags, :token => @auth_token
         
         [t1,t2,t3].each do |t|
-          Tag.find_by(tag_text: t).should_not be_nil
+          expect(Tag.find_by(tag_text: t)).not_to be_nil
         end
       end
       
@@ -174,8 +174,8 @@ describe V1::IdeasController do
         @idea = Idea.last
         output = JSON.parse(response.body)
 
-        output.should be_a_kind_of(Hash)
-        output["description"].should == @idea.description
+        expect(output).to be_a_kind_of(Hash)
+        expect(output["description"]).to eq(@idea.description)
       end
       
     end
@@ -184,7 +184,7 @@ describe V1::IdeasController do
       
       it "isn't successful" do
         post :create, :idea => @attr, :format => 'json', :token => @auth_token
-        response.should_not be_success
+        expect(response).not_to be_success
       end
     
       it "shouldn't create the idea" do
@@ -199,7 +199,7 @@ describe V1::IdeasController do
       
       it "isn't successful" do
         post :create, :idea => @attr, :format => 'json', :sparks => "100,150", :token => @auth_token
-        response.should_not be_success
+        expect(response).not_to be_success
       end
     
       it "shouldn't create the idea" do
@@ -229,7 +229,7 @@ describe V1::IdeasController do
     
     it "is successful" do
       delete :destroy, :id => @idea, :format => 'json', :token => @auth_token
-      response.should be_success
+      expect(response).to be_success
     end
     
     it "doesn't destroy the idea" do
@@ -241,7 +241,7 @@ describe V1::IdeasController do
     it "removes the user from the idea" do
       delete :destroy, :id => @idea, :format => 'json', :token => @auth_token
       @idea.reload
-      @idea.user.should be_nil
+      expect(@idea.user).to be_nil
     end
     
     it "returns the idea" do
@@ -249,8 +249,8 @@ describe V1::IdeasController do
       @idea.reload
       output = JSON.parse(response.body)
       
-      output.should be_a_kind_of(Hash)
-      output["description"].should == @idea.description
+      expect(output).to be_a_kind_of(Hash)
+      expect(output["description"]).to eq(@idea.description)
     end
     
   end
