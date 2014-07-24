@@ -21,6 +21,8 @@ group :development, :test do
   gem 'fuubar'
   gem 'factory_girl_rails'
   gem 'webrat'
+
+  gem 'capybara'
 end
 
 group :production do

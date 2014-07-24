@@ -247,7 +247,7 @@ describe V1::SparksController do
     
     it "removes the user from the spark" do
       delete :destroy, :id => @spark, :format => 'json', :token => @auth_token
-      @spark.users.include?(@test_user).should_not be_true
+      @spark.users.include?(@test_user).should be_falsey
     end
     
     it "returns the spark" do
