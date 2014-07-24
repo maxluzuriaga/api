@@ -3,8 +3,8 @@
 # Table name: tag_linkers
 #
 #  id           :integer          not null, primary key
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
+#  created_at   :datetime
+#  updated_at   :datetime
 #  tagable_id   :integer
 #  tagable_type :string(255)
 #  tag_id       :integer

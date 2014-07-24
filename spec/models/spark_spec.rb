@@ -7,8 +7,8 @@
 #  content_type      :string(1)
 #  content           :text
 #  content_hash      :string(255)
-#  created_at        :datetime         not null
-#  updated_at        :datetime         not null
+#  created_at        :datetime
+#  updated_at        :datetime
 #  file_file_name    :string(255)
 #  file_content_type :string(255)
 #  file_file_size    :integer

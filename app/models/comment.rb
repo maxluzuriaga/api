@@ -5,8 +5,8 @@
 #  id               :integer          not null, primary key
 #  comment_text     :text
 #  user_id          :integer
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
+#  created_at       :datetime
+#  updated_at       :datetime
 #  commentable_id   :integer
 #  commentable_type :string(255)
 #
