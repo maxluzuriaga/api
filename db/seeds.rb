@@ -18,7 +18,6 @@ tag_texts.each do |t|
 end
 
 content_types = %w[L C T P A V]
-spark_types = %w[W I P]
 
 pictures = %w[image1.jpg image2.jpg image3.jpg]
 videos = %w[http://www.youtube.com/watch?v=FSi2fJALDyQ http://www.youtube.com/watch?v=DF8nHmHUCAs http://www.youtube.com/watch?v=iCE1W-aGsWU]
@@ -32,59 +31,57 @@ code_thumbs = %w[code1.jpeg code1.jpeg code3.jpeg]
 sparks = []
 
 content_types.each do |c|
-  spark_types.each do |s|
-    spark = Spark.new(:content_type => c, :spark_type => s)
-    
-    case c
-    when "L"
-      spark.content = links.pop
-      spark.file = File.new("db/seed_files/#{link_thumbs.pop}", "r")
-    when "C"
-      spark.content = code.pop
-      spark.file = File.new("db/seed_files/#{code_thumbs.pop}", "r")
-    when "T"
-      spark.content = Faker::Lorem.sentences.join(" ")
-    when "P"
-      filename = pictures.pop
-      spark.content = filename
-      spark.file = File.new("db/seed_files/#{filename}", "r")
-    when "A"
-      filename = audios.pop
-      spark.content = filename
-      spark.file = File.new("db/seed_files/#{filename}", "r")
-    when "V"
-      spark.content = videos.pop
-      spark.file = File.new("db/seed_files/#{video_thumbs.pop}", "r")
-    end
-    
-    spark.save
-    
-    (rand(4) + 1).times do
-      t = tags.sample
-      
-      unless(spark.tags.include?(t))
-        spark.tags << t
-      end
-    end
-    
-    (rand(3) + 1).times do
-      u = users.sample
-      
-      unless(spark.users.include?(u))
-        spark.users << u
-      end
-    end
-    
-    (rand(4)).times do
-      comment = Comment.new(:comment_text => Faker::Lorem.sentences.join(" "))
-      comment.user = users.sample
-      comment.commentable = spark
-      
-      comment.save
-    end
-    
-    sparks << spark
+  spark = Spark.new(:content_type => c)
+  
+  case c
+  when "L"
+    spark.content = links.pop
+    spark.file = File.new("db/seed_files/#{link_thumbs.pop}", "r")
+  when "C"
+    spark.content = code.pop
+    spark.file = File.new("db/seed_files/#{code_thumbs.pop}", "r")
+  when "T"
+    spark.content = Faker::Lorem.sentences.join(" ")
+  when "P"
+    filename = pictures.pop
+    spark.content = filename
+    spark.file = File.new("db/seed_files/#{filename}", "r")
+  when "A"
+    filename = audios.pop
+    spark.content = filename
+    spark.file = File.new("db/seed_files/#{filename}", "r")
+  when "V"
+    spark.content = videos.pop
+    spark.file = File.new("db/seed_files/#{video_thumbs.pop}", "r")
   end
+  
+  spark.save
+  
+  (rand(4) + 1).times do
+    t = tags.sample
+    
+    unless(spark.tags.include?(t))
+      spark.tags << t
+    end
+  end
+  
+  (rand(3) + 1).times do
+    u = users.sample
+    
+    unless(spark.users.include?(u))
+      spark.users << u
+    end
+  end
+  
+  (rand(4)).times do
+    comment = Comment.new(:comment_text => Faker::Lorem.sentences.join(" "))
+    comment.user = users.sample
+    comment.commentable = spark
+    
+    comment.save
+  end
+  
+  sparks << spark
 end
 
 15.times do

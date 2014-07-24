@@ -4,7 +4,7 @@ unless lite
   json.user idea.user, :id, :name, :email if idea.user
 
   json.sparks idea.sparks do |spark|
-    json.(spark, :id, :created_at, :spark_type, :content_type, :content, :content_hash)
+    json.(spark, :id, :created_at, :content_type, :content, :content_hash)
     json.file spark.file.url if spark.file.exists?
   end
 

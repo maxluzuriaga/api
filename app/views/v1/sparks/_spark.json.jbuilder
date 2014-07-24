@@ -1,4 +1,4 @@
-json.(spark, :id, :created_at, :spark_type, :content_type, :content, :content_hash)
+json.(spark, :id, :created_at, :content_type, :content, :content_hash)
 json.file spark.file.url if spark.file.exists?
 
 unless lite
