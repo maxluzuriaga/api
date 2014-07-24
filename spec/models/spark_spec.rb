@@ -21,7 +21,6 @@ describe Spark, :type => :model do
   
   before do
     @attr = {
-      :spark_type   => "I",
       :content_type => "L",
       :content      => "http://google.com/",
       :file         => Rack::Test::UploadedFile.new('spec/fixtures/images/test.jpg', 'image/jpeg')
@@ -33,28 +32,6 @@ describe Spark, :type => :model do
   end
   
   describe "validation" do
-    
-    it "requires a spark type" do
-      spark = Spark.new(@attr)
-      spark.spark_type = ""
-      expect(spark).not_to be_valid
-    end
-    
-    it "accepts valid spark types" do
-      types = %w[W I P]
-      types.each do |t|
-        spark = Spark.new(@attr.merge(:spark_type => t))
-        expect(spark).to be_valid
-      end
-    end
-    
-    it "rejects invalid spark types" do
-      types = %w[w i p some_type L l V v C c T t A a V v whatever]
-      types.each do |t|
-        spark = Spark.new(@attr.merge(:spark_type => t))
-        expect(spark).not_to be_valid
-      end
-    end
     
     it "requires a content type" do
       spark = Spark.new(@attr)

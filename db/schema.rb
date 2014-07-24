@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130719224155) do
+ActiveRecord::Schema.define(version: 20140724194406) do
 
   create_table "authentications", force: true do |t|
     t.integer  "user_id"
@@ -51,7 +51,6 @@ ActiveRecord::Schema.define(version: 20130719224155) do
   end
 
   create_table "sparks", force: true do |t|
-    t.string   "spark_type",        limit: 1
     t.string   "content_type",      limit: 1
     t.text     "content"
     t.string   "content_hash"
