@@ -3,7 +3,6 @@
 # Table name: sparks
 #
 #  id                :integer          not null, primary key
-#  spark_type        :string(1)
 #  content_type      :string(1)
 #  content           :text
 #  content_hash      :string(255)
