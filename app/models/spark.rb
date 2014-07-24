@@ -7,8 +7,8 @@
 #  content_type      :string(1)
 #  content           :text
 #  content_hash      :string(255)
-#  created_at        :datetime         not null
-#  updated_at        :datetime         not null
+#  created_at        :datetime
+#  updated_at        :datetime
 #  file_file_name    :string(255)
 #  file_content_type :string(255)
 #  file_file_size    :integer
@@ -30,7 +30,6 @@ class Spark < ActiveRecord::Base
   validates :content_type, :presence => true, :format => { :with => /\A[LVCTPA]\z/, :message => "must be a valid content type" }
   validates :content, :presence => true
   validates :content_hash, :presence => true, :uniqueness => true
-  validates :spark_type, :presence => true, :format => { :with => /\A[WIP]\z/, :message => "must be a valid spark type" }
   
   before_validation :hash_content
   
